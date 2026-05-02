@@ -12,6 +12,12 @@ type Config struct{
 	DatabasePassword string `env:"POSTGRES_PASSWORD"`
 	DatabaseUser string `env:"POSTGRES_USER"`
 	DatabasePort string `env:"POSTGRES_PORT" envDefault:"5432"`	
+	DatbaseHost string `env:"POSTGRES_HOST"`
+}
+
+//function attached as property to string by using reciever
+func (conf *Config) GetDatabaseUrl() string {
+	return fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",conf.DatabaseUser,conf.DatabasePassword,conf.DatbaseHost,conf.DatabasePort,conf.DatabaseName)
 }
 
 func GetNewConfig() (*Config, error) {
