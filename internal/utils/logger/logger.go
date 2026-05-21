@@ -23,3 +23,4 @@ func GetAuthSlogger() (*Slogger) {
 	return  slogger
 }
 
+var AuthSlogger *Slogger = GetAuthSlogger()

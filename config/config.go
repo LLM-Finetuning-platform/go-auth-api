@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/caarlos0/env/v11"
+	"github.com/eswarashish/go-auth-api/internal/utils/logger"
 	"github.com/joho/godotenv"
 )
 
@@ -17,6 +18,8 @@ type Config struct{
 
 //function attached as property to string by using reciever
 func (conf *Config) GetDatabaseUrl() string {
+	logger := logger.AuthSlogger.GetLogger()
+	logger.Debug("Fetching the Database Url as string")
 	return fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",conf.DatabaseUser,conf.DatabasePassword,conf.DatbaseHost,conf.DatabasePort,conf.DatabaseName)
 }
 
