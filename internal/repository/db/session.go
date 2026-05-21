@@ -18,7 +18,7 @@ type Session struct{
 }
 
 func GetSession (conf *config.Config) (*sql.DB, error){
-	logger := logger.GetAuthSlogger().GetLogger()
+	logger := logger.AuthSlogger.GetLogger()
 	logger.Info("Creating a postgres session")
 	
 	dsn := conf.GetDatabaseUrl()
