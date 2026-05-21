@@ -25,7 +25,6 @@ func (req *SignUpRequest) verify() error{
 		return 	fmt.Errorf("Improper Email Format %s", err)
 	}
 	
-	
 
 	return nil
 }
