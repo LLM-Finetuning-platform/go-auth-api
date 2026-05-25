@@ -1,6 +1,8 @@
 package redisservice
 
 import (
+	"time"
+
 	"github.com/redis/go-redis/v9"
 )
 
@@ -9,12 +11,17 @@ type RedisService struct {
 	DB int
 	Pwd string
 	Protocol int
-
+	Poolsize int
+	MinIdleConnections int
+	PoolTimeOutSecs int
 }
 
 
 func (service *RedisService) Connect () (*redis.Client, error){
-	newClient := redis.NewClient(&redis.Options{Addr: service.Address, DB: service.DB, Password: service.Pwd, Protocol: service.Protocol})
+	newClient := redis.NewClient(&redis.Options{Addr: service.Address, DB: service.DB, Password: service.Pwd, Protocol: service.Protocol, 
+	PoolSize: service.Poolsize,
+	MinIdleConns: service.MinIdleConnections,
+	PoolTimeout: time.Second*time.Duration(service.PoolTimeOutSecs),})
 	defer service.disconnect(newClient)
 	return newClient,nil
 }
