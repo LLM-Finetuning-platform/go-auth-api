@@ -14,7 +14,7 @@ type Config struct{
 	DatabaseUser string `env:"POSTGRES_USER"`
 	DatabasePort string `env:"POSTGRES_PORT" envDefault:"5432"`	
 	DatbaseHost string `env:"POSTGRES_HOST"`
-	CloudflareAPIKey string `env:"CLOUDFLARE_API_KEY"`
+	ResendAPIKey string `env:"RESEND_API_KEY"`
 }
 
 //function attached as property to string by using reciever

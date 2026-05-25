@@ -39,6 +39,6 @@ func SignUp(req *SignUpRequest) (string, error){
 	if err != nil {
 		return  "", nil
 	}
-	// send otp email and save to redis
+	
 	return otp, nil
 }
