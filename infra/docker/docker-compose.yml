@@ -3,7 +3,7 @@ services:
       ports:
         - '5432:5432' 
       env_file:
-        - .env.dev
+        - ../../.env.dev
 
       image:  postgres:14-alpine
       container_name: PostgresContainer
