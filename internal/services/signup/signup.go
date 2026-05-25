@@ -3,6 +3,7 @@ package signup
 import (
 	"fmt"
 
+	"github.com/eswarashish/go-auth-api/internal/utils"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -29,3 +30,15 @@ func (req *SignUpRequest) verify() error{
 	return nil
 }
 
+func SignUp(req *SignUpRequest) (string, error){
+	err := req.verify()
+	if err != nil{
+		return "",nil
+	}
+	otp,err:= utils.OTPGeneration()
+	if err != nil {
+		return  "", nil
+	}
+	
+	return otp, nil
+}
