@@ -4,49 +4,50 @@ import (
 	"context"
 	"fmt"
 	"time"
+
 	"github.com/eswarashish/go-auth-api/internal/services/email"
-	"github.com/go-playground/validator/v10"
+	"github.com/eswarashish/go-auth-api/internal/utils"
 	"github.com/redis/go-redis/v9"
 )
 
 type SignUpRequest struct{
-	Email string `json:"email" validate:"required,email"`
+	Email utils.Email
 	Client *email.ResendClient
 	Params *email.EmailParams
 	OTP string
 }
 
-func validateEmailFormat(email string) error{
-	validate := validator.New()
-	req := SignUpRequest{Email: email}
-	return validate.Struct(req)
-}
-
-
-
-
 func (req *SignUpRequest) verify() error{
-	err:=validateEmailFormat(req.Email)
+	err:=utils.ValidateEmailFormat(req.Email.Id)
 	if err != nil{
 		return 	fmt.Errorf("Improper Email Format %s", err)
 	}
-	
-
 	return nil
 }
 
-func SignUp(req *SignUpRequest, cache *redis.Client) (string, error){
+func SignUpEmail(req *SignUpRequest, cache *redis.Client, ttl time.Duration) (bool, error){
 	err := req.verify()
 	if err != nil{
-		return "",nil
+		return false,fmt.Errorf("Email Verification failed %w",err)
 	}
 	
 	_,err = req.Client.EmailService(req.Params)
-	ctx := context.Background()
-	cache.Set(ctx,req.OTP,req.Email,10*time.Minute)
 	if err != nil {
-		return  "", nil
+		return  false, fmt.Errorf("Sign up failed %w",err)
+	}
+	ctx := context.Background()
+	err = cache.Set(ctx,req.OTP,req.Email, ttl).Err()
+	if err != nil {
+		return  false, fmt.Errorf("Sign up failed %w",err)
 	}
 	
-	return "res", nil
+	return true, nil
+}
+
+func SignUpVerification (email string,otp string, cache *redis.Client) (bool, error) {
+	err := utils.ValidateEmailFormat(email)
+	if err != nil {
+		return false, err	
+	}
+	return utils.OTPVerification(otp,cache,email)
 }

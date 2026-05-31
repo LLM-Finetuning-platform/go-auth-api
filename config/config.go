@@ -3,30 +3,38 @@ package config
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/caarlos0/env/v11"
+	"github.com/eswarashish/go-auth-api/internal/services/redisservice"
 	"github.com/eswarashish/go-auth-api/internal/utils/logger"
 	"github.com/joho/godotenv"
 )
 
-type Config struct{
+type DatabaseConfig struct{
+
 	DatabaseName string `env:"POSTGRES_DB"`
 	DatabasePassword string `env:"POSTGRES_PASSWORD"`
 	DatabaseUser string `env:"POSTGRES_USER"`
 	DatabasePort string `env:"POSTGRES_PORT" envDefault:"5432"`	
 	DatabaseHost string `env:"POSTGRES_HOST"`
+}
+type Config struct{
 	ResendAPIKey string `env:"RESEND_API_KEY"`
+	DBConfig DatabaseConfig
+	CacheConfig redisservice.RedisService
+	CacheTTL time.Duration
 }
 
 //function attached as property to string by using reciever
 func (conf *Config) GetDatabaseUrl() string {
 	logger := logger.AuthSlogger.GetLogger()
 	logger.Debug("Fetching the Database Url as string")
-	return fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",conf.DatabaseUser,
-	conf.DatabasePassword,
-	conf.DatabaseHost,
-	conf.DatabasePort,
-	conf.DatabaseName)
+	return fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable",conf.DBConfig.DatabaseUser,
+	conf.DBConfig.DatabasePassword,
+	conf.DBConfig.DatabaseHost,
+	conf.DBConfig.DatabasePort,
+	conf.DBConfig.DatabaseName)
 }
 
 func GetNewConfig() (*Config, error) {
