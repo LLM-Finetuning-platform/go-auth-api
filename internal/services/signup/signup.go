@@ -1,14 +1,19 @@
 package signup
 
 import (
+	"context"
 	"fmt"
-
-	"github.com/eswarashish/go-auth-api/internal/utils"
+	"time"
+	"github.com/eswarashish/go-auth-api/internal/services/email"
 	"github.com/go-playground/validator/v10"
+	"github.com/redis/go-redis/v9"
 )
 
 type SignUpRequest struct{
 	Email string `json:"email" validate:"required,email"`
+	Client *email.ResendClient
+	Params *email.EmailParams
+	OTP string
 }
 
 func validateEmailFormat(email string) error{
@@ -30,15 +35,18 @@ func (req *SignUpRequest) verify() error{
 	return nil
 }
 
-func SignUp(req *SignUpRequest) (string, error){
+func SignUp(req *SignUpRequest, cache *redis.Client) (string, error){
 	err := req.verify()
 	if err != nil{
 		return "",nil
 	}
-	otp,err:= utils.OTPGeneration()
+	
+	_,err = req.Client.EmailService(req.Params)
+	ctx := context.Background()
+	cache.Set(ctx,req.OTP,req.Email,10*time.Minute)
 	if err != nil {
 		return  "", nil
 	}
 	
-	return otp, nil
+	return "res", nil
 }

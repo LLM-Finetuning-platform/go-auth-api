@@ -26,7 +26,7 @@ func (conf *Config) GetDatabaseUrl() string {
 
 func GetNewConfig() (*Config, error) {
 	//since this is only dev environment we are loading in dev
-	err := godotenv.Load("/home/ashish/Desktop/projects/go-auth-api/.env.dev")
+	err := godotenv.Load("../env.dev")
 	if err !=nil{
 		return nil, fmt.Errorf("Failed to load the dev environment %w", err)
 	}
