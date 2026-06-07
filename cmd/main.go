@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/eswarashish/go-auth-api/config"
-	"github.com/eswarashish/go-auth-api/internal/repository/db"
+	"github.com/eswarashish/go-auth-api/internal/services/db"
 )
 
 func main()  {
