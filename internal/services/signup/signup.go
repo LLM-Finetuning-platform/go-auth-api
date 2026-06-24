@@ -32,18 +32,19 @@ func (req *SignUpRequest) verify() error {
 	return nil
 }
 
-func SignUp(req *SignUpRequest, cache *redis.Client) (string, error) {
+func SignUp(req *SignUpRequest, cache *redis.Client) ( error) {
 	err := req.verify()
 	if err != nil {
-		return "", nil
+		return  err
 	}
 
 	_, err = req.Client.EmailService(req.Params)
+	if err != nil {
+		return  err
+	}
 	ctx := context.Background()
 	cache.Set(ctx, req.OTP, req.Email, 10*time.Minute)
-	if err != nil {
-		return "", nil
-	}
+	
 
-	return "res", nil
+	return  nil
 }
