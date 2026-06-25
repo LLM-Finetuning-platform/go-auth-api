@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto.v1;
+
+option go_package = "github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc;auth_pb";
+
+message UserData {
+    string id =1;
+    string username =2;
+    string email =3;
+}
+
+message Token{
+    string token = 1;
+}
+
+message OTPStatus {
+    bool otp_sent = 1;
+}

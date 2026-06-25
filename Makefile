@@ -7,16 +7,16 @@ ifneq ($(wildcard $(ENV_FILE)),)
     export $(shell sed 's/=.*//' $(ENV_FILE))
 endif
 
-.PHONY: status up down create
+.PHONY: status migration_up migration_down protoc 
 
 status:
 		@echo "Checking goose migration status for [$(ENV)]"
 		goose -dir $(MIGRATIONS_DIR) status
 
-up:
+migration_up:
 		@echo "Running migrations for [$(ENV)]"
 		goose -dir $(MIGRATIONS_DIR) up
 
-down:
+migration_down:
 		@echo "Rolling back to migration for [$(ENV)]"
-		goose -dir $(MIGRATIONS_DIR) down
+		goose -dir $(MIGRATIONS_DIR) down	

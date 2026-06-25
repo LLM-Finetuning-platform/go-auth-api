@@ -1,0 +1,11 @@
+version: v1
+name: buf.build/llmfp/go-auth-api
+
+deps: []
+lint:
+  use:
+    - STANDARD
+breaking:
+  use:
+    - FILE
+
