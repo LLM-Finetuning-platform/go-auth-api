@@ -1,4 +1,4 @@
-name: Auth Dev CI
+name: Auth Dev CD
 
 on:  
     push: 
@@ -12,5 +12,5 @@ on:
          - '**/buf.lock'
          - '**/buf.md'               
 jobs:
-    buf-cd:
+    buf-auth-cd:
         uses: LLM-Finetuning-platform/shared-workflows/.github/workflows/buf-cd.yaml@main
