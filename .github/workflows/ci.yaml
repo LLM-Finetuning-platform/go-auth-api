@@ -5,13 +5,7 @@ on:
       branches: 
          - develop
          - main
-      paths: 
-         - 'proto/**'
-         - '**.proto'
-         - '**/buf.yaml'
-         - '**/buf.lock'
-         - '**/buf.md'        
 jobs:
-    buf-ci:
+    buf-auth-ci:
         uses: LLM-Finetuning-platform/shared-workflows/.github/workflows/buf-ci.yaml@main
         
