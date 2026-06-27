@@ -425,6 +425,110 @@ func (x *Email) GetEmail() string {
 	return ""
 }
 
+type SignUPVerifyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Otp           string                 `protobuf:"bytes,1,opt,name=otp,proto3" json:"otp,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignUPVerifyRequest) Reset() {
+	*x = SignUPVerifyRequest{}
+	mi := &file_proto_v1_auth_api_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignUPVerifyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignUPVerifyRequest) ProtoMessage() {}
+
+func (x *SignUPVerifyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_auth_api_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignUPVerifyRequest.ProtoReflect.Descriptor instead.
+func (*SignUPVerifyRequest) Descriptor() ([]byte, []int) {
+	return file_proto_v1_auth_api_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SignUPVerifyRequest) GetOtp() string {
+	if x != nil {
+		return x.Otp
+	}
+	return ""
+}
+
+func (x *SignUPVerifyRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *SignUPVerifyRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+type SignUPVerifyResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SignUPVerifyResponse) Reset() {
+	*x = SignUPVerifyResponse{}
+	mi := &file_proto_v1_auth_api_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SignUPVerifyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SignUPVerifyResponse) ProtoMessage() {}
+
+func (x *SignUPVerifyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_auth_api_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SignUPVerifyResponse.ProtoReflect.Descriptor instead.
+func (*SignUPVerifyResponse) Descriptor() ([]byte, []int) {
+	return file_proto_v1_auth_api_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SignUPVerifyResponse) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
 var File_proto_v1_auth_api_proto protoreflect.FileDescriptor
 
 const file_proto_v1_auth_api_proto_rawDesc = "" +
@@ -449,12 +553,19 @@ const file_proto_v1_auth_api_proto_rawDesc = "" +
 	"\x0eSignupResponse\x12+\n" +
 	"\x06status\x18\x01 \x01(\v2\x13.proto.v1.OTPStatusR\x06status\"\x1d\n" +
 	"\x05Email\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email2\xfa\x01\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\"Y\n" +
+	"\x13SignUPVerifyRequest\x12\x10\n" +
+	"\x03otp\x18\x01 \x01(\tR\x03otp\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\".\n" +
+	"\x14SignUPVerifyResponse\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status2\xcb\x02\n" +
 	"\x0eAuthAPIService\x12:\n" +
 	"\x05Login\x12\x16.proto.v1.LoginRequest\x1a\x17.proto.v1.LoginResponse\"\x00\x127\n" +
 	"\x04Auth\x12\x15.proto.v1.AuthRequest\x1a\x16.proto.v1.AuthResponse\"\x00\x12=\n" +
 	"\x06Signup\x12\x17.proto.v1.SignupRequest\x1a\x18.proto.v1.SignupResponse\"\x00\x124\n" +
-	"\x03OTP\x12\x14.proto.v1.OTPRequest\x1a\x15.proto.v1.OTPResponse\"\x00BOZMgithub.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc;auth_pbb\x06proto3"
+	"\x03OTP\x12\x14.proto.v1.OTPRequest\x1a\x15.proto.v1.OTPResponse\"\x00\x12O\n" +
+	"\fSignUPVerify\x12\x1d.proto.v1.SignUPVerifyRequest\x1a\x1e.proto.v1.SignUPVerifyResponse\"\x00BOZMgithub.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc;auth_pbb\x06proto3"
 
 var (
 	file_proto_v1_auth_api_proto_rawDescOnce sync.Once
@@ -468,40 +579,44 @@ func file_proto_v1_auth_api_proto_rawDescGZIP() []byte {
 	return file_proto_v1_auth_api_proto_rawDescData
 }
 
-var file_proto_v1_auth_api_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_proto_v1_auth_api_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_proto_v1_auth_api_proto_goTypes = []any{
-	(*LoginRequest)(nil),   // 0: proto.v1.LoginRequest
-	(*LoginResponse)(nil),  // 1: proto.v1.LoginResponse
-	(*AuthRequest)(nil),    // 2: proto.v1.AuthRequest
-	(*AuthResponse)(nil),   // 3: proto.v1.AuthResponse
-	(*SignupRequest)(nil),  // 4: proto.v1.SignupRequest
-	(*OTPResponse)(nil),    // 5: proto.v1.OTPResponse
-	(*OTPRequest)(nil),     // 6: proto.v1.OTPRequest
-	(*SignupResponse)(nil), // 7: proto.v1.SignupResponse
-	(*Email)(nil),          // 8: proto.v1.Email
-	(*OTPStatus)(nil),      // 9: proto.v1.OTPStatus
-	(*Token)(nil),          // 10: proto.v1.Token
-	(*UserData)(nil),       // 11: proto.v1.UserData
+	(*LoginRequest)(nil),         // 0: proto.v1.LoginRequest
+	(*LoginResponse)(nil),        // 1: proto.v1.LoginResponse
+	(*AuthRequest)(nil),          // 2: proto.v1.AuthRequest
+	(*AuthResponse)(nil),         // 3: proto.v1.AuthResponse
+	(*SignupRequest)(nil),        // 4: proto.v1.SignupRequest
+	(*OTPResponse)(nil),          // 5: proto.v1.OTPResponse
+	(*OTPRequest)(nil),           // 6: proto.v1.OTPRequest
+	(*SignupResponse)(nil),       // 7: proto.v1.SignupResponse
+	(*Email)(nil),                // 8: proto.v1.Email
+	(*SignUPVerifyRequest)(nil),  // 9: proto.v1.SignUPVerifyRequest
+	(*SignUPVerifyResponse)(nil), // 10: proto.v1.SignUPVerifyResponse
+	(*OTPStatus)(nil),            // 11: proto.v1.OTPStatus
+	(*Token)(nil),                // 12: proto.v1.Token
+	(*UserData)(nil),             // 13: proto.v1.UserData
 }
 var file_proto_v1_auth_api_proto_depIdxs = []int32{
 	8,  // 0: proto.v1.LoginRequest.email:type_name -> proto.v1.Email
-	9,  // 1: proto.v1.LoginResponse.status:type_name -> proto.v1.OTPStatus
-	10, // 2: proto.v1.AuthRequest.token:type_name -> proto.v1.Token
-	11, // 3: proto.v1.AuthResponse.userdata:type_name -> proto.v1.UserData
+	11, // 1: proto.v1.LoginResponse.status:type_name -> proto.v1.OTPStatus
+	12, // 2: proto.v1.AuthRequest.token:type_name -> proto.v1.Token
+	13, // 3: proto.v1.AuthResponse.userdata:type_name -> proto.v1.UserData
 	8,  // 4: proto.v1.SignupRequest.email:type_name -> proto.v1.Email
-	10, // 5: proto.v1.OTPResponse.token:type_name -> proto.v1.Token
-	11, // 6: proto.v1.OTPResponse.userdata:type_name -> proto.v1.UserData
-	9,  // 7: proto.v1.SignupResponse.status:type_name -> proto.v1.OTPStatus
+	12, // 5: proto.v1.OTPResponse.token:type_name -> proto.v1.Token
+	13, // 6: proto.v1.OTPResponse.userdata:type_name -> proto.v1.UserData
+	11, // 7: proto.v1.SignupResponse.status:type_name -> proto.v1.OTPStatus
 	0,  // 8: proto.v1.AuthAPIService.Login:input_type -> proto.v1.LoginRequest
 	2,  // 9: proto.v1.AuthAPIService.Auth:input_type -> proto.v1.AuthRequest
 	4,  // 10: proto.v1.AuthAPIService.Signup:input_type -> proto.v1.SignupRequest
 	6,  // 11: proto.v1.AuthAPIService.OTP:input_type -> proto.v1.OTPRequest
-	1,  // 12: proto.v1.AuthAPIService.Login:output_type -> proto.v1.LoginResponse
-	3,  // 13: proto.v1.AuthAPIService.Auth:output_type -> proto.v1.AuthResponse
-	7,  // 14: proto.v1.AuthAPIService.Signup:output_type -> proto.v1.SignupResponse
-	5,  // 15: proto.v1.AuthAPIService.OTP:output_type -> proto.v1.OTPResponse
-	12, // [12:16] is the sub-list for method output_type
-	8,  // [8:12] is the sub-list for method input_type
+	9,  // 12: proto.v1.AuthAPIService.SignUPVerify:input_type -> proto.v1.SignUPVerifyRequest
+	1,  // 13: proto.v1.AuthAPIService.Login:output_type -> proto.v1.LoginResponse
+	3,  // 14: proto.v1.AuthAPIService.Auth:output_type -> proto.v1.AuthResponse
+	7,  // 15: proto.v1.AuthAPIService.Signup:output_type -> proto.v1.SignupResponse
+	5,  // 16: proto.v1.AuthAPIService.OTP:output_type -> proto.v1.OTPResponse
+	10, // 17: proto.v1.AuthAPIService.SignUPVerify:output_type -> proto.v1.SignUPVerifyResponse
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
@@ -519,7 +634,7 @@ func file_proto_v1_auth_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_v1_auth_api_proto_rawDesc), len(file_proto_v1_auth_api_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

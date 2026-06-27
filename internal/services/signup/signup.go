@@ -2,11 +2,15 @@ package signup
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/email"
+	"github.com/LLM-Finetuning-platform/go-auth-api/internal/utils"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -32,7 +36,7 @@ func (req *SignUpRequest) verify() error {
 	return nil
 }
 
-func SignUp(req *SignUpRequest, cache *redis.Client) ( error) {
+func SignUp(req *SignUpRequest ,cache *redis.Client) ( error) {
 	err := req.verify()
 	if err != nil {
 		return  err
@@ -44,7 +48,28 @@ func SignUp(req *SignUpRequest, cache *redis.Client) ( error) {
 	}
 	ctx := context.Background()
 	cache.Set(ctx, req.OTP, req.Email, 10*time.Minute)
-	
 
 	return  nil
+}//verify otp standalone function save to db standalone function  and then signupverify fucntion 
+
+func SignUpVerify(email string, otp string,username string, cache *redis.Client, db *sql.DB) (bool, error) {
+	//lets verify first
+	verify, err := utils.Verify_otp(otp,email,cache)
+	if err != nil {
+		return false, err
+	}
+	if !verify{
+		return  false, errors.New("Invalid OTP")
+	}
+	userID := uuid.New().String()
+
+	query := `
+		INSERT INTO users (id, username, email) 
+		VALUES ($1, $2, $3);
+	`
+	_, err = db.Exec(query,userID,username,email)
+	if err != nil{
+		return false, err
+	}
+	return  true, nil
 }
