@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package proto.v1;
+
+option go_package = "github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc;auth_pb";
+import "proto/v1/schema.proto";
+service AuthAPIService {
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc Auth(AuthRequest) returns (AuthResponse) {}
+    rpc Signup(SignupRequest) returns (SignupResponse) {}
+    rpc OTP(OTPRequest) returns (OTPResponse) {}
+};
+
+message LoginRequest {
+    Email email =1;
+}
+
+message LoginResponse {
+   OTPStatus status =1;
+}
+
+message AuthRequest {
+    Token token = 1;
+}
+message AuthResponse {
+    UserData userdata = 1;
+}
+message SignupRequest {
+    Email email = 1;
+}
+
+message OTPResponse {
+  Token token =1;
+  UserData userdata =2;
+}
+message OTPRequest {
+    string otp =1;
+}
+message SignupResponse{
+    OTPStatus status = 1;
+}
+
+message Email {
+    string email = 1;
+}

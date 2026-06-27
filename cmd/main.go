@@ -3,19 +3,19 @@ package main
 import (
 	"fmt"
 
-	"github.com/eswarashish/go-auth-api/config"
-	"github.com/eswarashish/go-auth-api/internal/repository/db"
+	"github.com/LLM-Finetuning-platform/go-auth-api/config"
+	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/db"
 )
 
-func main()  {
+func main() {
 	cfg, err := config.GetNewConfig()
-	if err !=nil{
-		
+	if err != nil {
+
 		fmt.Print(err)
 		return
 	}
 	session, err := db.GetSession(cfg)
-	if err != nil{
+	if err != nil {
 		fmt.Print(err)
 		return
 	}

@@ -1,0 +1,27 @@
+name: Auth Dev CI
+
+on:  
+    pull_request: 
+      branches: 
+         - develop
+         - main
+      paths: 
+         - 'proto/**'
+         - '**.proto'
+         - '**/buf.yaml'
+         - '**/buf.lock'
+         - '**/buf.md'
+    push: 
+      branches: 
+         - develop
+         - main
+      paths: 
+         - 'proto/**'
+         - '**.proto'
+         - '**/buf.yaml'
+         - '**/buf.lock'
+         - '**/buf.md'               
+jobs:
+    buf-ci:
+        uses: LLM-Finetuning-platform/shared-workflows/.github/workflows/buf-ci.yaml@main
+        
