@@ -12,8 +12,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type Session struct {
-}
+
 
 func GetSession(conf *config.Config) (*sql.DB, error) {
 	logger := logger.AuthSlogger.GetLogger()

@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AuthAPIService_Login_FullMethodName  = "/proto.v1.AuthAPIService/Login"
-	AuthAPIService_Auth_FullMethodName   = "/proto.v1.AuthAPIService/Auth"
-	AuthAPIService_Signup_FullMethodName = "/proto.v1.AuthAPIService/Signup"
-	AuthAPIService_OTP_FullMethodName    = "/proto.v1.AuthAPIService/OTP"
+	AuthAPIService_Login_FullMethodName        = "/proto.v1.AuthAPIService/Login"
+	AuthAPIService_Auth_FullMethodName         = "/proto.v1.AuthAPIService/Auth"
+	AuthAPIService_Signup_FullMethodName       = "/proto.v1.AuthAPIService/Signup"
+	AuthAPIService_OTP_FullMethodName          = "/proto.v1.AuthAPIService/OTP"
+	AuthAPIService_SignUPVerify_FullMethodName = "/proto.v1.AuthAPIService/SignUPVerify"
 )
 
 // AuthAPIServiceClient is the client API for AuthAPIService service.
@@ -33,6 +34,7 @@ type AuthAPIServiceClient interface {
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
 	Signup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error)
 	OTP(ctx context.Context, in *OTPRequest, opts ...grpc.CallOption) (*OTPResponse, error)
+	SignUPVerify(ctx context.Context, in *SignUPVerifyRequest, opts ...grpc.CallOption) (*SignUPVerifyResponse, error)
 }
 
 type authAPIServiceClient struct {
@@ -83,6 +85,16 @@ func (c *authAPIServiceClient) OTP(ctx context.Context, in *OTPRequest, opts ...
 	return out, nil
 }
 
+func (c *authAPIServiceClient) SignUPVerify(ctx context.Context, in *SignUPVerifyRequest, opts ...grpc.CallOption) (*SignUPVerifyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SignUPVerifyResponse)
+	err := c.cc.Invoke(ctx, AuthAPIService_SignUPVerify_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthAPIServiceServer is the server API for AuthAPIService service.
 // All implementations must embed UnimplementedAuthAPIServiceServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type AuthAPIServiceServer interface {
 	Auth(context.Context, *AuthRequest) (*AuthResponse, error)
 	Signup(context.Context, *SignupRequest) (*SignupResponse, error)
 	OTP(context.Context, *OTPRequest) (*OTPResponse, error)
+	SignUPVerify(context.Context, *SignUPVerifyRequest) (*SignUPVerifyResponse, error)
 	mustEmbedUnimplementedAuthAPIServiceServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedAuthAPIServiceServer) Signup(context.Context, *SignupRequest)
 }
 func (UnimplementedAuthAPIServiceServer) OTP(context.Context, *OTPRequest) (*OTPResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method OTP not implemented")
+}
+func (UnimplementedAuthAPIServiceServer) SignUPVerify(context.Context, *SignUPVerifyRequest) (*SignUPVerifyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SignUPVerify not implemented")
 }
 func (UnimplementedAuthAPIServiceServer) mustEmbedUnimplementedAuthAPIServiceServer() {}
 func (UnimplementedAuthAPIServiceServer) testEmbeddedByValue()                        {}
@@ -206,6 +222,24 @@ func _AuthAPIService_OTP_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthAPIService_SignUPVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SignUPVerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthAPIServiceServer).SignUPVerify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthAPIService_SignUPVerify_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthAPIServiceServer).SignUPVerify(ctx, req.(*SignUPVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthAPIService_ServiceDesc is the grpc.ServiceDesc for AuthAPIService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var AuthAPIService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OTP",
 			Handler:    _AuthAPIService_OTP_Handler,
+		},
+		{
+			MethodName: "SignUPVerify",
+			Handler:    _AuthAPIService_SignUPVerify_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
