@@ -488,6 +488,7 @@ func (x *SignUPVerifyRequest) GetEmail() string {
 type SignUPVerifyResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	Response      *OTPResponse           `protobuf:"bytes,2,opt,name=response,proto3" json:"response,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -529,6 +530,13 @@ func (x *SignUPVerifyResponse) GetStatus() bool {
 	return false
 }
 
+func (x *SignUPVerifyResponse) GetResponse() *OTPResponse {
+	if x != nil {
+		return x.Response
+	}
+	return nil
+}
+
 var File_proto_v1_auth_api_proto protoreflect.FileDescriptor
 
 const file_proto_v1_auth_api_proto_rawDesc = "" +
@@ -557,9 +565,10 @@ const file_proto_v1_auth_api_proto_rawDesc = "" +
 	"\x13SignUPVerifyRequest\x12\x10\n" +
 	"\x03otp\x18\x01 \x01(\tR\x03otp\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
-	"\x05email\x18\x03 \x01(\tR\x05email\".\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\"a\n" +
 	"\x14SignUPVerifyResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status2\xcb\x02\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\x121\n" +
+	"\bresponse\x18\x02 \x01(\v2\x15.proto.v1.OTPResponseR\bresponse2\xcb\x02\n" +
 	"\x0eAuthAPIService\x12:\n" +
 	"\x05Login\x12\x16.proto.v1.LoginRequest\x1a\x17.proto.v1.LoginResponse\"\x00\x127\n" +
 	"\x04Auth\x12\x15.proto.v1.AuthRequest\x1a\x16.proto.v1.AuthResponse\"\x00\x12=\n" +
@@ -605,21 +614,22 @@ var file_proto_v1_auth_api_proto_depIdxs = []int32{
 	12, // 5: proto.v1.OTPResponse.token:type_name -> proto.v1.Token
 	13, // 6: proto.v1.OTPResponse.userdata:type_name -> proto.v1.UserData
 	11, // 7: proto.v1.SignupResponse.status:type_name -> proto.v1.OTPStatus
-	0,  // 8: proto.v1.AuthAPIService.Login:input_type -> proto.v1.LoginRequest
-	2,  // 9: proto.v1.AuthAPIService.Auth:input_type -> proto.v1.AuthRequest
-	4,  // 10: proto.v1.AuthAPIService.Signup:input_type -> proto.v1.SignupRequest
-	6,  // 11: proto.v1.AuthAPIService.OTP:input_type -> proto.v1.OTPRequest
-	9,  // 12: proto.v1.AuthAPIService.SignUPVerify:input_type -> proto.v1.SignUPVerifyRequest
-	1,  // 13: proto.v1.AuthAPIService.Login:output_type -> proto.v1.LoginResponse
-	3,  // 14: proto.v1.AuthAPIService.Auth:output_type -> proto.v1.AuthResponse
-	7,  // 15: proto.v1.AuthAPIService.Signup:output_type -> proto.v1.SignupResponse
-	5,  // 16: proto.v1.AuthAPIService.OTP:output_type -> proto.v1.OTPResponse
-	10, // 17: proto.v1.AuthAPIService.SignUPVerify:output_type -> proto.v1.SignUPVerifyResponse
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	5,  // 8: proto.v1.SignUPVerifyResponse.response:type_name -> proto.v1.OTPResponse
+	0,  // 9: proto.v1.AuthAPIService.Login:input_type -> proto.v1.LoginRequest
+	2,  // 10: proto.v1.AuthAPIService.Auth:input_type -> proto.v1.AuthRequest
+	4,  // 11: proto.v1.AuthAPIService.Signup:input_type -> proto.v1.SignupRequest
+	6,  // 12: proto.v1.AuthAPIService.OTP:input_type -> proto.v1.OTPRequest
+	9,  // 13: proto.v1.AuthAPIService.SignUPVerify:input_type -> proto.v1.SignUPVerifyRequest
+	1,  // 14: proto.v1.AuthAPIService.Login:output_type -> proto.v1.LoginResponse
+	3,  // 15: proto.v1.AuthAPIService.Auth:output_type -> proto.v1.AuthResponse
+	7,  // 16: proto.v1.AuthAPIService.Signup:output_type -> proto.v1.SignupResponse
+	5,  // 17: proto.v1.AuthAPIService.OTP:output_type -> proto.v1.OTPResponse
+	10, // 18: proto.v1.AuthAPIService.SignUPVerify:output_type -> proto.v1.SignUPVerifyResponse
+	14, // [14:19] is the sub-list for method output_type
+	9,  // [9:14] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_proto_v1_auth_api_proto_init() }
