@@ -10,6 +10,7 @@ service AuthAPIService {
     rpc Signup(SignupRequest) returns (SignupResponse) {}
     rpc OTP(OTPRequest) returns (OTPResponse) {}
     rpc SignUPVerify(SignUPVerifyRequest) returns (SignUPVerifyResponse) {}
+    rpc LoginVerify(LoginVerifyRequest) returns (LoginVerifyResponse) {}
 };
 
 message LoginRequest {
@@ -52,6 +53,16 @@ message SignUPVerifyRequest {
 }
 
 message SignUPVerifyResponse {
+    bool status = 1;
+    OTPResponse response = 2;
+}
+
+message LoginVerifyRequest {
+    OTPRequest request = 1;
+    Email email = 2;
+}
+
+message LoginVerifyResponse {
     bool status = 1;
     OTPResponse response = 2;
 }
