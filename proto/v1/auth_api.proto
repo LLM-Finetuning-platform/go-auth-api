@@ -53,4 +53,5 @@ message SignUPVerifyRequest {
 
 message SignUPVerifyResponse {
     bool status = 1;
+    OTPResponse response = 2;
 }
