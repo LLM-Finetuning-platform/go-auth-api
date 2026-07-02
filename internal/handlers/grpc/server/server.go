@@ -33,7 +33,7 @@ func (server *MyServer) Signup (ctx context.Context, req *auth_pb.SignupRequest)
 	}
 	params := &email.EmailParams{From: server.from, To: []string{req.GetEmail().Email}, Html: server.html, Subject: server.subject }	
 	sreq := &signup.SignUpRequest{Email: req.Email.GetEmail(), OTP: otp, Client: server.resend, Params: params}
-	err = signup.SignUp(sreq,  server.redis)
+	err = signup.SignUp(sreq, ctx ,server.redis)
 	if err != nil{
 		return nil, err
 	}
@@ -42,3 +42,14 @@ func (server *MyServer) Signup (ctx context.Context, req *auth_pb.SignupRequest)
 
 }
 
+func (server *MyServer) SignUPVerify (ctx context.Context, req *auth_pb.SignUPVerifyRequest) (*auth_pb.SignUPVerifyResponse, error) {
+	verify, err := signup.SignUpVerify(req.GetEmail(),req.GetOtp(),req.GetUsername(),server.redis,server.db)
+	if err!= nil {
+		return  nil, err
+	}
+	userdata := &auth_pb.UserData{Username: req.GetUsername(),Email: req.Email,}
+    token, err := utils.OTPGeneration()	
+	otpres := &auth_pb.OTPResponse{Userdata: userdata, Token: &auth_pb.Token{Token: token} }
+	res := &auth_pb.SignUPVerifyResponse{Status: verify, Response: otpres }
+	return res, nil 	
+}
