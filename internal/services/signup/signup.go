@@ -36,7 +36,7 @@ func (req *SignUpRequest) verify() error {
 	return nil
 }
 
-func SignUp(req *SignUpRequest ,cache *redis.Client) ( error) {
+func SignUp(req *SignUpRequest ,ctx context.Context,cache *redis.Client) ( error) {
 	err := req.verify()
 	if err != nil {
 		return  err
@@ -46,7 +46,6 @@ func SignUp(req *SignUpRequest ,cache *redis.Client) ( error) {
 	if err != nil {
 		return  err
 	}
-	ctx := context.Background()
 	cache.Set(ctx, req.OTP, req.Email, 10*time.Minute)
 
 	return  nil
