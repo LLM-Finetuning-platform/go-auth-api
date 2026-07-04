@@ -1,4 +1,4 @@
-package signup
+package login
 
 import (
 	"context"
@@ -8,11 +8,12 @@ import (
 
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/email"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/utils"
-	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 )
 
-func SignUp(req *email.Request ,ctx context.Context,cache *redis.Client) ( error) {
+
+
+func Login(req *email.Request ,ctx context.Context,cache *redis.Client) ( error) {
 	err := req.Verify()
 	if err != nil {
 		return  err
@@ -22,14 +23,13 @@ func SignUp(req *email.Request ,ctx context.Context,cache *redis.Client) ( error
 	if err != nil {
 		return  err
 	}
-	cache.Set(ctx, req.Email, req.OTP, 10*time.Minute)
+	cache.Set(ctx, req.OTP, req.Email, 10*time.Minute)
 
 	return  nil
-}//verify otp standalone function save to db standalone function  and then signupverify fucntion 
+}
 
-func SignUpVerify(ctx context.Context,email string, otp string,username string, cache *redis.Client, db *sql.DB) (bool, error) {
+func LoginVerify(email string, otp string,username string, cache *redis.Client, db *sql.DB, ctx context.Context) (bool, error) {
 	//lets verify first
-	//Cache checked check in db as well
 	verify, err := utils.Verify_otp(otp,email,cache)
 	if err != nil {
 		return false, err
@@ -37,13 +37,11 @@ func SignUpVerify(ctx context.Context,email string, otp string,username string, 
 	if !verify{
 		return  false, errors.New("Invalid OTP")
 	}
-	userID := uuid.New().String()
 
 	query := `
-		INSERT INTO users (id, username, email) 
-		VALUES ($1, $2, $3);
+	SELECT COUNT(*) FROM users WHERE email = $1 LIMIT 1
 	`
-	_, err = db.ExecContext(ctx,query,userID,username,email)
+    err = db.QueryRowContext(ctx,query,email).Err()
 	if err != nil{
 		return false, err
 	}
