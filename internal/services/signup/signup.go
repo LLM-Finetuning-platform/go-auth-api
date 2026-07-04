@@ -37,13 +37,13 @@ func SignUpVerify(ctx context.Context,email string, otp string,username string, 
 	if !verify{
 		return  false, errors.New("Invalid OTP")
 	}
-	userID := uuid.New().String()
+	user_id:= uuid.New().String()
 
 	query := `
-		INSERT INTO users (id, username, email) 
+		INSERT INTO users (user_id, username, email) 
 		VALUES ($1, $2, $3);
 	`
-	_, err = db.ExecContext(ctx,query,userID,username,email)
+	_, err = db.ExecContext(ctx,query,user_id,username,email)
 	if err != nil{
 		return false, err
 	}
