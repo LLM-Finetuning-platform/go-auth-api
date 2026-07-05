@@ -6,6 +6,7 @@ import (
 
 	auth_pb "github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc/proto/v1"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/email"
+	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/login"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/signup"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/utils"
 	"github.com/redis/go-redis/v9"
@@ -24,7 +25,27 @@ type MyServer struct{
 }
 
 func (server *MyServer) Login (ctx context.Context, req *auth_pb.LoginRequest) (*auth_pb.LoginResponse, error){
-	return &auth_pb.LoginResponse{}, nil
+	otp, err := utils.OTPGeneration()
+	if err != nil{
+		return nil, err
+	}
+	params := &email.EmailParams{From: server.from, To: []string{req.GetEmail().Email}, Html: server.html, Subject: server.subject}
+	sreq := &email.Request{Email: req.GetEmail().Email, OTP: otp, Client: server.resend, Params: params}
+	err = login.Login(sreq, ctx, server.redis)
+	if err != nil {
+		return  nil, err
+	}
+	status := &auth_pb.OTPStatus{OtpSent: true}
+	return &auth_pb.LoginResponse{Status: status},nil
+
+}
+
+func (server *MyServer) LoginVerify (ctx context.Context, req *auth_pb.LoginVerifyRequest) (*auth_pb.LoginVerifyResponse, error){
+	verify, err := login.LoginVerify(req.GetEmail().Email,  req.Request.GetOtp(), server.redis, server.db, ctx)
+	if err != nil{
+		return  nil, err
+	}	
+	userdata := &auth_pb.UserData{Username: req.}
 }
 
 func (server *MyServer) Signup (ctx context.Context, req *auth_pb.SignupRequest) (*auth_pb.SignupResponse, error){

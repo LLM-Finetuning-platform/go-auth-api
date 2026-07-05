@@ -28,7 +28,7 @@ func Login(req *email.Request ,ctx context.Context,cache *redis.Client) ( error)
 	return  nil
 }
 
-func LoginVerify(email string, otp string,username string, cache *redis.Client, db *sql.DB, ctx context.Context) (bool, error) {
+func LoginVerify(email string, otp string, cache *redis.Client, db *sql.DB, ctx context.Context) (bool, error) {
 	//lets verify first
 	verify, err := utils.Verify_otp(otp,email,cache)
 	if err != nil {
@@ -37,13 +37,9 @@ func LoginVerify(email string, otp string,username string, cache *redis.Client, 
 	if !verify{
 		return  false, errors.New("Invalid OTP")
 	}
-
-	query := `
-	SELECT COUNT(*) FROM users WHERE email = $1 LIMIT 1
-	`
-    err = db.QueryRowContext(ctx,query,email).Err()
+	verify, err = utils.CheckExisting(email,ctx,db)	
 	if err != nil{
 		return false, err
 	}
-	return  true, nil
+	return  verify, nil
 }
