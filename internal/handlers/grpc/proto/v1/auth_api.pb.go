@@ -296,6 +296,7 @@ func (x *OTPResponse) GetUserdata() *UserData {
 type OTPRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Otp           string                 `protobuf:"bytes,1,opt,name=otp,proto3" json:"otp,omitempty"`
+	Email         *Email                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -335,6 +336,13 @@ func (x *OTPRequest) GetOtp() string {
 		return x.Otp
 	}
 	return ""
+}
+
+func (x *OTPRequest) GetEmail() *Email {
+	if x != nil {
+		return x.Email
+	}
+	return nil
 }
 
 type SignupResponse struct {
@@ -658,10 +666,11 @@ const file_proto_v1_auth_api_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\v2\x0f.proto.v1.EmailR\x05email\"d\n" +
 	"\vOTPResponse\x12%\n" +
 	"\x05token\x18\x01 \x01(\v2\x0f.proto.v1.TokenR\x05token\x12.\n" +
-	"\buserdata\x18\x02 \x01(\v2\x12.proto.v1.UserDataR\buserdata\"\x1e\n" +
+	"\buserdata\x18\x02 \x01(\v2\x12.proto.v1.UserDataR\buserdata\"E\n" +
 	"\n" +
 	"OTPRequest\x12\x10\n" +
-	"\x03otp\x18\x01 \x01(\tR\x03otp\"=\n" +
+	"\x03otp\x18\x01 \x01(\tR\x03otp\x12%\n" +
+	"\x05email\x18\x02 \x01(\v2\x0f.proto.v1.EmailR\x05email\"=\n" +
 	"\x0eSignupResponse\x12+\n" +
 	"\x06status\x18\x01 \x01(\v2\x13.proto.v1.OTPStatusR\x06status\"\x1d\n" +
 	"\x05Email\x12\x14\n" +
@@ -726,28 +735,29 @@ var file_proto_v1_auth_api_proto_depIdxs = []int32{
 	8,  // 4: proto.v1.SignupRequest.email:type_name -> proto.v1.Email
 	14, // 5: proto.v1.OTPResponse.token:type_name -> proto.v1.Token
 	15, // 6: proto.v1.OTPResponse.userdata:type_name -> proto.v1.UserData
-	13, // 7: proto.v1.SignupResponse.status:type_name -> proto.v1.OTPStatus
-	5,  // 8: proto.v1.SignUPVerifyResponse.response:type_name -> proto.v1.OTPResponse
-	6,  // 9: proto.v1.LoginVerifyRequest.request:type_name -> proto.v1.OTPRequest
-	8,  // 10: proto.v1.LoginVerifyRequest.email:type_name -> proto.v1.Email
-	5,  // 11: proto.v1.LoginVerifyResponse.response:type_name -> proto.v1.OTPResponse
-	0,  // 12: proto.v1.AuthAPIService.Login:input_type -> proto.v1.LoginRequest
-	2,  // 13: proto.v1.AuthAPIService.Auth:input_type -> proto.v1.AuthRequest
-	4,  // 14: proto.v1.AuthAPIService.Signup:input_type -> proto.v1.SignupRequest
-	6,  // 15: proto.v1.AuthAPIService.OTP:input_type -> proto.v1.OTPRequest
-	9,  // 16: proto.v1.AuthAPIService.SignUPVerify:input_type -> proto.v1.SignUPVerifyRequest
-	11, // 17: proto.v1.AuthAPIService.LoginVerify:input_type -> proto.v1.LoginVerifyRequest
-	1,  // 18: proto.v1.AuthAPIService.Login:output_type -> proto.v1.LoginResponse
-	3,  // 19: proto.v1.AuthAPIService.Auth:output_type -> proto.v1.AuthResponse
-	7,  // 20: proto.v1.AuthAPIService.Signup:output_type -> proto.v1.SignupResponse
-	5,  // 21: proto.v1.AuthAPIService.OTP:output_type -> proto.v1.OTPResponse
-	10, // 22: proto.v1.AuthAPIService.SignUPVerify:output_type -> proto.v1.SignUPVerifyResponse
-	12, // 23: proto.v1.AuthAPIService.LoginVerify:output_type -> proto.v1.LoginVerifyResponse
-	18, // [18:24] is the sub-list for method output_type
-	12, // [12:18] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	8,  // 7: proto.v1.OTPRequest.email:type_name -> proto.v1.Email
+	13, // 8: proto.v1.SignupResponse.status:type_name -> proto.v1.OTPStatus
+	5,  // 9: proto.v1.SignUPVerifyResponse.response:type_name -> proto.v1.OTPResponse
+	6,  // 10: proto.v1.LoginVerifyRequest.request:type_name -> proto.v1.OTPRequest
+	8,  // 11: proto.v1.LoginVerifyRequest.email:type_name -> proto.v1.Email
+	5,  // 12: proto.v1.LoginVerifyResponse.response:type_name -> proto.v1.OTPResponse
+	0,  // 13: proto.v1.AuthAPIService.Login:input_type -> proto.v1.LoginRequest
+	2,  // 14: proto.v1.AuthAPIService.Auth:input_type -> proto.v1.AuthRequest
+	4,  // 15: proto.v1.AuthAPIService.Signup:input_type -> proto.v1.SignupRequest
+	6,  // 16: proto.v1.AuthAPIService.OTP:input_type -> proto.v1.OTPRequest
+	9,  // 17: proto.v1.AuthAPIService.SignUPVerify:input_type -> proto.v1.SignUPVerifyRequest
+	11, // 18: proto.v1.AuthAPIService.LoginVerify:input_type -> proto.v1.LoginVerifyRequest
+	1,  // 19: proto.v1.AuthAPIService.Login:output_type -> proto.v1.LoginResponse
+	3,  // 20: proto.v1.AuthAPIService.Auth:output_type -> proto.v1.AuthResponse
+	7,  // 21: proto.v1.AuthAPIService.Signup:output_type -> proto.v1.SignupResponse
+	5,  // 22: proto.v1.AuthAPIService.OTP:output_type -> proto.v1.OTPResponse
+	10, // 23: proto.v1.AuthAPIService.SignUPVerify:output_type -> proto.v1.SignUPVerifyResponse
+	12, // 24: proto.v1.AuthAPIService.LoginVerify:output_type -> proto.v1.LoginVerifyResponse
+	19, // [19:25] is the sub-list for method output_type
+	13, // [13:19] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_proto_v1_auth_api_proto_init() }
