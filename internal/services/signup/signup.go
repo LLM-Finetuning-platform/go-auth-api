@@ -30,22 +30,18 @@ func SignUp(req *email.Request ,ctx context.Context,cache *redis.Client) ( error
 func SignUpVerify(ctx context.Context,email string, otp string,username string, cache *redis.Client, db *sql.DB) (bool, error) {
 	//lets verify first
 	//Cache checked check in db as well
-	verify, err := utils.Verify_otp(otp,email,cache)
+	verify, err := utils.Verify_otp(otp,ctx,email,cache)
 	if err != nil {
 		return false, err
 	}
 	if !verify{
 		return  false, errors.New("Invalid OTP")
 	}
+	verify, err = utils.CheckExisting(email,ctx, db)	
 	user_id:= uuid.New().String()
-
-	query := `
-		INSERT INTO users (user_id, username, email) 
-		VALUES ($1, $2, $3);
-	`
-	_, err = db.ExecContext(ctx,query,user_id,username,email)
+	_, err = db.ExecContext(ctx,utils.GetQueries().Insert,user_id,username,email)
 	if err != nil{
 		return false, err
 	}
-	return  true, nil
+	return  verify, nil
 }

@@ -37,6 +37,7 @@ message OTPResponse {
 }
 message OTPRequest {
     string otp =1;
+    Email email =2;
 }
 message SignupResponse{
     OTPStatus status = 1;
