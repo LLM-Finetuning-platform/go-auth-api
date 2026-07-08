@@ -75,13 +75,13 @@ func main() {
 
     grpcServer.GracefulStop()
     fmt.Println("gRPC server stopped gracefully.")
-	if err := redisservice.Disconnect(redisSession); err != nil {
+	if err = redisservice.Disconnect(redisSession); err != nil {
         fmt.Printf("Error closing Redis connection: %v\n", err)
     } else {
         fmt.Println("Redis pool disconnected cleanly.")
     }
 
-    if err := db_session.Close(); err != nil {
+    if err = db_session.Close(); err != nil {
         fmt.Printf("Error closing DB connection: %v\n", err)
     } else {
         fmt.Println("Database pool closed cleanly.")
