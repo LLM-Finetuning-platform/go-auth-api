@@ -22,11 +22,10 @@ func (service *RedisService) Connect () (*redis.Client, error){
 	PoolSize: service.Poolsize,
 	MinIdleConns: service.MinIdleConnections,
 	PoolTimeout: time.Second*time.Duration(service.PoolTimeOutSecs),})
-	defer service.disconnect(newClient)
 	return newClient,nil
 }
 
-func (service *RedisService) disconnect (client *redis.Client) (error) {
+func (service *RedisService) Disconnect (client *redis.Client) (error) {
 	err:= client.Close()
 	if err != nil {
 		return err

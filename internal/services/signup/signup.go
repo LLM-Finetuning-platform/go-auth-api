@@ -18,7 +18,7 @@ func SignUp(req *email.Request ,ctx context.Context,cache *redis.Client) ( error
 		return  err
 	}
 
-	_, err = req.Client.EmailService(req.Params)
+	_, err = req.Client.EmailService(req)
 	if err != nil {
 		return  err
 	}

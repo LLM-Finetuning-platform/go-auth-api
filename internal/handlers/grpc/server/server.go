@@ -15,14 +15,14 @@ import (
 )
 
 type MyServer struct{
-	server *auth_pb.UnimplementedAuthAPIServiceServer
-	redis *redis.Client
-	resend *email.ResendClient
-	db *sql.DB
-	from string
-	html string
-	subject string
-	secretconf *utils.TokenConfig
+	auth_pb.UnimplementedAuthAPIServiceServer
+	Redis *redis.Client
+	Resend *email.ResendClient
+	Db *sql.DB
+	From string
+	Html string
+	Subject string
+	Secretconf *utils.TokenConfig
 }
 
 func (server *MyServer) Login (ctx context.Context, req *auth_pb.LoginRequest) (*auth_pb.LoginResponse, error){
@@ -30,9 +30,9 @@ func (server *MyServer) Login (ctx context.Context, req *auth_pb.LoginRequest) (
 	if err != nil{
 		return nil, err
 	}
-	params := &email.EmailParams{From: server.from, To: []string{req.GetEmail().Email}, Html: server.html, Subject: server.subject}
-	sreq := &email.Request{Email: req.GetEmail().Email, OTP: otp, Client: server.resend, Params: params}
-	err = login.Login(sreq, ctx, server.redis)
+	params := &email.EmailParams{From: server.From, To: []string{req.GetEmail().Email}, Html: server.Html, Subject: server.Subject}
+	sreq := &email.Request{Email: req.GetEmail().Email, OTP: otp, Client: server.Resend, Params: params}
+	err = login.Login(sreq, ctx, server.Redis)
 	if err != nil {
 		return  nil, err
 	}
@@ -42,17 +42,17 @@ func (server *MyServer) Login (ctx context.Context, req *auth_pb.LoginRequest) (
 }
 
 func (server *MyServer) LoginVerify (ctx context.Context, req *auth_pb.LoginVerifyRequest) (*auth_pb.LoginVerifyResponse, error){
-	verify, err := login.LoginVerify(req.GetEmail().Email,  req.Request.GetOtp(), server.redis, server.db, ctx)
+	verify, err := login.LoginVerify(req.GetEmail().Email,  req.Request.GetOtp(), server.Redis, server.Db, ctx)
 	if err != nil{
 		return  nil, err
 	}	
 
-	username, err := utils.GetUsername(req.GetEmail().Email,ctx,server.db)
+	username, err := utils.GetUsername(req.GetEmail().Email,ctx,server.Db)
 	if err != nil{
 		return nil , err
 	}
 	userdata := &auth_pb.UserData{Username: username, Email: req.GetEmail().Email}
-	token, err := server.secretconf.Encode(username,24,req.GetEmail().Email)
+	token, err := server.Secretconf.Encode(username,24,req.GetEmail().Email)
 	if err != nil {
 		return nil, err
 	}
@@ -65,9 +65,9 @@ func (server *MyServer) Signup (ctx context.Context, req *auth_pb.SignupRequest)
 	if err != nil {
 		return nil, err
 	}
-	params := &email.EmailParams{From: server.from, To: []string{req.GetEmail().Email}, Html: server.html, Subject: server.subject }	
-	sreq := &email.Request{Email: req.Email.GetEmail(), OTP: otp, Client: server.resend, Params: params}
-	err = signup.SignUp(sreq, ctx ,server.redis)
+	params := &email.EmailParams{From: server.From, To: []string{req.GetEmail().Email}, Html: server.Html, Subject: server.Subject }	
+	sreq := &email.Request{Email: req.Email.GetEmail(), OTP: otp, Client: server.Resend, Params: params}
+	err = signup.SignUp(sreq, ctx ,server.Redis)
 	if err != nil{
 		return nil, err
 	}
@@ -77,12 +77,12 @@ func (server *MyServer) Signup (ctx context.Context, req *auth_pb.SignupRequest)
 }
 
 func (server *MyServer) SignUPVerify (ctx context.Context, req *auth_pb.SignUPVerifyRequest) (*auth_pb.SignUPVerifyResponse, error) {
-	verify, err := signup.SignUpVerify(ctx, req.GetEmail(),req.GetOtp(),req.GetUsername(),server.redis,server.db)
+	verify, err := signup.SignUpVerify(ctx, req.GetEmail(),req.GetOtp(),req.GetUsername(),server.Redis,server.Db)
 	if err!= nil {
 		return  nil, err
 	}
 	userdata := &auth_pb.UserData{Username: req.GetUsername(),Email: req.GetEmail(),}
-	token, err := server.secretconf.Encode(req.GetUsername(), 24, req.GetEmail())
+	token, err := server.Secretconf.Encode(req.GetUsername(), 24, req.GetEmail())
 	if err!= nil{
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func (server *MyServer) SignUPVerify (ctx context.Context, req *auth_pb.SignUPVe
 }
 
 func (server *MyServer) Auth (ctx context.Context, req *auth_pb.AuthRequest) (*auth_pb.AuthResponse, error) {
-	usermap, err := server.secretconf.Decode(req.GetToken().Token)		
+	usermap, err := server.Secretconf.Decode(req.GetToken().Token)		
 	if err != nil {
 		return nil, err
 	}
@@ -103,19 +103,19 @@ func (server *MyServer) Auth (ctx context.Context, req *auth_pb.AuthRequest) (*a
 }
 
 func  (server *MyServer) OTP (ctx context.Context, req *auth_pb.OTPRequest) (*auth_pb.OTPResponse, error) {
-	verify, err := utils.Verify_otp(req.GetOtp(), ctx,req.Email.GetEmail(),server.redis)
+	verify, err := utils.Verify_otp(req.GetOtp(), ctx,req.Email.GetEmail(),server.Redis)
 	if err !=nil {
 		return nil, err
 	}				
 	if !verify {
 		return nil, fmt.Errorf("OTP Not found")
 	}
-	username, err := utils.GetUsername(req.Email.GetEmail(),ctx,server.db)
+	username, err := utils.GetUsername(req.Email.GetEmail(),ctx,server.Db)
 	if err !=nil{
 		return nil, err
 	} 	
 	userdata := &auth_pb.UserData{Username: username, Email: req.Email.GetEmail()}
-	token,err := server.secretconf.Encode(username,24,req.Email.GetEmail())
+	token,err := server.Secretconf.Encode(username,24,req.Email.GetEmail())
 	if err != nil  {
 		return nil, err
 	}

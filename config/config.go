@@ -16,6 +16,16 @@ type Config struct {
 	DatabasePort     string `env:"POSTGRES_PORT" envDefault:"5432"`
 	DatabaseHost     string `env:"POSTGRES_HOST"`
 	ResendAPIKey     string `env:"RESEND_API_KEY"`
+	RedisAddress 	 string `env:"REDIS_ADDRESS"`
+	RedisDB 		 int	`env:"REDIS_DB"`
+	RedisPwd 		 string	`env:"REDIS_PWD"`
+	RedisProtocol 	 int	`env:"REDIS_PROTOCOL"`
+	RedisPoolsize 	 int	`env:"REDIS_POOL_SIZE"`
+	RedisMinIdleConnections int	`env:"REDIS_CONN"`
+	RedisPoolTimeOutSecs  int	`env:"REDIS_POOL_TIME_SEC"`
+	JwtPrivateKeyBase64 string `env:"JWT_PRIVATE_KEY_BASE64"`
+	From			 string `env:"FROM"`
+	Port 			 string `env:"PORT" envDefault:":50051"`		
 }
 
 // function attached as property to string by using reciever
@@ -50,7 +60,7 @@ func loadEnv() error {
 	if (appEnv == "prod") || (appEnv == "staging") {
 		return nil
 	}
-	envFile := fmt.Sprintf(".env.%s", appEnv)
+	envFile := fmt.Sprintf("../.env.%s", appEnv)
 	if err := godotenv.Load(envFile); err != nil {
 		return fmt.Errorf("Failed to load %s: %w", envFile, err)
 	}

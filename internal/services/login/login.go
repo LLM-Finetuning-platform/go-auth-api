@@ -19,7 +19,7 @@ func Login(req *email.Request ,ctx context.Context,cache *redis.Client) ( error)
 		return  err
 	}
 
-	_, err = req.Client.EmailService(req.Params)
+	_, err = req.Client.EmailService(req)
 	if err != nil {
 		return  err
 	}
@@ -30,7 +30,7 @@ func Login(req *email.Request ,ctx context.Context,cache *redis.Client) ( error)
 
 func LoginVerify(email string, otp string, cache *redis.Client, db *sql.DB, ctx context.Context) (bool, error) {
 	//lets verify first
-	verify, err := utils.Verify_otp(otp,email,cache)
+	verify, err := utils.Verify_otp(otp,ctx,email,cache)
 	if err != nil {
 		return false, err
 	}

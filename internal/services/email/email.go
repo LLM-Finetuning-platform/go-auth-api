@@ -47,13 +47,13 @@ func NewClient(cfg *config.Config) (*resend.Client, error) {
 	return resend.NewClient(cfg.ResendAPIKey), nil
 }
 
-func (rclient *ResendClient) EmailService(eparams *EmailParams) (*resend.SendEmailResponse, error) {
+func (rclient *ResendClient) EmailService(emailReq *Request) (*resend.SendEmailResponse, error) {
 
 	params := &resend.SendEmailRequest{
-		From:    eparams.From,
-		To:      eparams.To,
-		Subject: eparams.Subject,
-		Html:    eparams.Html,
+		From:    emailReq.Params.From,
+		To:      emailReq.Params.To,
+		Subject: emailReq.Params.Subject ,
+		Html:    emailReq.Params.Html + emailReq.OTP,
 	}
 	return rclient.Client.Emails.Send(params)
 
