@@ -43,7 +43,7 @@ func GetNewConfig() (*Config, error) {
 	//since this is only dev environment we are loading in dev
 	err := loadEnv()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to load the dev environment %w", err)
+		return nil, err
 	}
 	cfg, err := env.ParseAs[Config]()
 	if err != nil {
@@ -62,7 +62,7 @@ func loadEnv() error {
 	}
 	envFile := fmt.Sprintf("../.env.%s", appEnv)
 	if err := godotenv.Load(envFile); err != nil {
-		return fmt.Errorf("Failed to load %s: %w", envFile, err)
+		return err
 	}
 	return nil
 }

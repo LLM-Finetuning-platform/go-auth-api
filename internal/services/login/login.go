@@ -35,7 +35,7 @@ func LoginVerify(email string, otp string, cache *redis.Client, db *sql.DB, ctx 
 		return false, err
 	}
 	if !verify{
-		return  false, errors.New("Invalid OTP")
+		return  false, errors.New("invalid otp")
 	}
 	verify, err = utils.CheckExisting(email,ctx,db)	
 	if err != nil{

@@ -1,7 +1,6 @@
 package email
 
 import (
-	"fmt"
 
 	"github.com/LLM-Finetuning-platform/go-auth-api/config"
 	"github.com/go-playground/validator/v10"
@@ -24,7 +23,7 @@ func ValidateEmailFormat(email string) error {
 func (req *Request) Verify() error {
 	err := ValidateEmailFormat(req.Email)
 	if err != nil {
-		return fmt.Errorf("Improper Email Format %s", err)
+		return err
 	}
 
 	return nil
