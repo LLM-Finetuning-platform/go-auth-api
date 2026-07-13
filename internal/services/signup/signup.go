@@ -18,7 +18,7 @@ func SignUp(req *email.Request ,ctx context.Context,cache *redis.Client) ( error
 		return  err
 	}
 
-	_, err = req.Client.EmailService(req.Params)
+	_, err = req.Client.EmailService(req)
 	if err != nil {
 		return  err
 	}
@@ -35,9 +35,12 @@ func SignUpVerify(ctx context.Context,email string, otp string,username string, 
 		return false, err
 	}
 	if !verify{
-		return  false, errors.New("Invalid OTP")
+		return  false, errors.New("invalid otp")
 	}
-	verify, err = utils.CheckExisting(email,ctx, db)	
+	verify, err = utils.CheckExisting(email,ctx, db)
+	if err != nil {
+		return verify, err
+	}	
 	user_id:= uuid.New().String()
 	_, err = db.ExecContext(ctx,utils.GetQueries().Insert,user_id,username,email)
 	if err != nil{

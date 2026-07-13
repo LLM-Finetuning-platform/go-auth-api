@@ -1,7 +1,6 @@
 package email
 
 import (
-	"fmt"
 
 	"github.com/LLM-Finetuning-platform/go-auth-api/config"
 	"github.com/go-playground/validator/v10"
@@ -24,7 +23,7 @@ func ValidateEmailFormat(email string) error {
 func (req *Request) Verify() error {
 	err := ValidateEmailFormat(req.Email)
 	if err != nil {
-		return fmt.Errorf("Improper Email Format %s", err)
+		return err
 	}
 
 	return nil
@@ -47,13 +46,13 @@ func NewClient(cfg *config.Config) (*resend.Client, error) {
 	return resend.NewClient(cfg.ResendAPIKey), nil
 }
 
-func (rclient *ResendClient) EmailService(eparams *EmailParams) (*resend.SendEmailResponse, error) {
+func (rclient *ResendClient) EmailService(emailReq *Request) (*resend.SendEmailResponse, error) {
 
 	params := &resend.SendEmailRequest{
-		From:    eparams.From,
-		To:      eparams.To,
-		Subject: eparams.Subject,
-		Html:    eparams.Html,
+		From:    emailReq.Params.From,
+		To:      emailReq.Params.To,
+		Subject: emailReq.Params.Subject ,
+		Html:    emailReq.Params.Html + emailReq.OTP,
 	}
 	return rclient.Client.Emails.Send(params)
 
