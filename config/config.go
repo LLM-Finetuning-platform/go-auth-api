@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -62,6 +63,9 @@ func loadEnv() error {
 	}
 	envFile := fmt.Sprintf("../.env.%s", appEnv)
 	if err := godotenv.Load(envFile); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return  nil
+		}
 		return err
 	}
 	return nil
