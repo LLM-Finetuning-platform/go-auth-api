@@ -4,7 +4,7 @@ ENV_FILE := .env.$(ENV)
 MIGRATIONS_DIR := ./internal/migrations
 ifneq ($(wildcard $(ENV_FILE)),)
     include $(ENV_FILE)
-    export $(shell sed 's/=.*//' $(ENV_FILE))
+	export 
 endif
 
 .PHONY: status migration_up migration_down protoc 
