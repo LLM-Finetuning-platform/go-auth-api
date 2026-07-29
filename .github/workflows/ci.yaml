@@ -45,7 +45,7 @@ jobs:
               env:
                 ENV: ci
                 GOOSE_DRIVER: postgres
-                GOOSE_DBSTRING: "postgres://postgres:postgrespassword@localhost:5432/testdb?sslmode=disable"
+                GOOSE_DBSTRING: "postgres://testuser:testpwd@localhost:5432/testdb?sslmode=disable"
               run: |
                 make status
                 make migration_up
