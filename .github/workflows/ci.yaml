@@ -50,4 +50,4 @@ jobs:
                 make status
                 make migration_up
                 make migration_down
-                make status 
+                make status
