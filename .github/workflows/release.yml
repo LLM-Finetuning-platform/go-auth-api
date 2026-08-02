@@ -1,0 +1,17 @@
+name: Semantic Release action
+
+on: 
+    push: 
+        branches: [main]
+    
+
+    
+permissions: 
+    pull-requests: write
+    issues: write
+    contents: write
+jobs:
+    go-auth-release:
+        uses: LLM-Finetuning-platform/shared-workflows/.github/workflows/release.yml@main
+        secrets: inherit
+  

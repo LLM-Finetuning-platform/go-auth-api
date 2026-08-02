@@ -24,6 +24,7 @@ const (
 	AuthAPIService_Signup_FullMethodName       = "/proto.v1.AuthAPIService/Signup"
 	AuthAPIService_OTP_FullMethodName          = "/proto.v1.AuthAPIService/OTP"
 	AuthAPIService_SignUPVerify_FullMethodName = "/proto.v1.AuthAPIService/SignUPVerify"
+	AuthAPIService_LoginVerify_FullMethodName  = "/proto.v1.AuthAPIService/LoginVerify"
 )
 
 // AuthAPIServiceClient is the client API for AuthAPIService service.
@@ -35,6 +36,7 @@ type AuthAPIServiceClient interface {
 	Signup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error)
 	OTP(ctx context.Context, in *OTPRequest, opts ...grpc.CallOption) (*OTPResponse, error)
 	SignUPVerify(ctx context.Context, in *SignUPVerifyRequest, opts ...grpc.CallOption) (*SignUPVerifyResponse, error)
+	LoginVerify(ctx context.Context, in *LoginVerifyRequest, opts ...grpc.CallOption) (*LoginVerifyResponse, error)
 }
 
 type authAPIServiceClient struct {
@@ -95,6 +97,16 @@ func (c *authAPIServiceClient) SignUPVerify(ctx context.Context, in *SignUPVerif
 	return out, nil
 }
 
+func (c *authAPIServiceClient) LoginVerify(ctx context.Context, in *LoginVerifyRequest, opts ...grpc.CallOption) (*LoginVerifyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoginVerifyResponse)
+	err := c.cc.Invoke(ctx, AuthAPIService_LoginVerify_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AuthAPIServiceServer is the server API for AuthAPIService service.
 // All implementations must embed UnimplementedAuthAPIServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type AuthAPIServiceServer interface {
 	Signup(context.Context, *SignupRequest) (*SignupResponse, error)
 	OTP(context.Context, *OTPRequest) (*OTPResponse, error)
 	SignUPVerify(context.Context, *SignUPVerifyRequest) (*SignUPVerifyResponse, error)
+	LoginVerify(context.Context, *LoginVerifyRequest) (*LoginVerifyResponse, error)
 	mustEmbedUnimplementedAuthAPIServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedAuthAPIServiceServer) OTP(context.Context, *OTPRequest) (*OTP
 }
 func (UnimplementedAuthAPIServiceServer) SignUPVerify(context.Context, *SignUPVerifyRequest) (*SignUPVerifyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SignUPVerify not implemented")
+}
+func (UnimplementedAuthAPIServiceServer) LoginVerify(context.Context, *LoginVerifyRequest) (*LoginVerifyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LoginVerify not implemented")
 }
 func (UnimplementedAuthAPIServiceServer) mustEmbedUnimplementedAuthAPIServiceServer() {}
 func (UnimplementedAuthAPIServiceServer) testEmbeddedByValue()                        {}
@@ -240,6 +256,24 @@ func _AuthAPIService_SignUPVerify_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthAPIService_LoginVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginVerifyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthAPIServiceServer).LoginVerify(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthAPIService_LoginVerify_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthAPIServiceServer).LoginVerify(ctx, req.(*LoginVerifyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AuthAPIService_ServiceDesc is the grpc.ServiceDesc for AuthAPIService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var AuthAPIService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SignUPVerify",
 			Handler:    _AuthAPIService_SignUPVerify_Handler,
+		},
+		{
+			MethodName: "LoginVerify",
+			Handler:    _AuthAPIService_LoginVerify_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

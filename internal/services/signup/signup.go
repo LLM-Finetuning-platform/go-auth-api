@@ -4,72 +4,47 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/email"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/utils"
-	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 )
 
-type SignUpRequest struct {
-	Email  string `json:"email" validate:"required,email"`
-	Client *email.ResendClient
-	Params *email.EmailParams
-	OTP    string
-}
-
-func validateEmailFormat(email string) error {
-	validate := validator.New()
-	req := SignUpRequest{Email: email}
-	return validate.Struct(req)
-}
-
-func (req *SignUpRequest) verify() error {
-	err := validateEmailFormat(req.Email)
-	if err != nil {
-		return fmt.Errorf("Improper Email Format %s", err)
-	}
-
-	return nil
-}
-
-func SignUp(req *SignUpRequest ,cache *redis.Client) ( error) {
-	err := req.verify()
+func SignUp(req *email.Request ,ctx context.Context,cache *redis.Client) ( error) {
+	err := req.Verify()
 	if err != nil {
 		return  err
 	}
 
-	_, err = req.Client.EmailService(req.Params)
+	_, err = req.Client.EmailService(req)
 	if err != nil {
 		return  err
 	}
-	ctx := context.Background()
-	cache.Set(ctx, req.OTP, req.Email, 10*time.Minute)
+	cache.Set(ctx, req.Email, req.OTP, 10*time.Minute)
 
 	return  nil
 }//verify otp standalone function save to db standalone function  and then signupverify fucntion 
 
-func SignUpVerify(email string, otp string,username string, cache *redis.Client, db *sql.DB) (bool, error) {
+func SignUpVerify(ctx context.Context,email string, otp string,username string, cache *redis.Client, db *sql.DB) (bool, error) {
 	//lets verify first
-	verify, err := utils.Verify_otp(otp,email,cache)
+	//Cache checked check in db as well
+	verify, err := utils.Verify_otp(otp,ctx,email,cache)
 	if err != nil {
 		return false, err
 	}
 	if !verify{
-		return  false, errors.New("Invalid OTP")
+		return  false, errors.New("invalid otp")
 	}
-	userID := uuid.New().String()
-
-	query := `
-		INSERT INTO users (id, username, email) 
-		VALUES ($1, $2, $3);
-	`
-	_, err = db.Exec(query,userID,username,email)
+	verify, err = utils.CheckExisting(email,ctx, db)
+	if err != nil {
+		return verify, err
+	}	
+	user_id:= uuid.New().String()
+	_, err = db.ExecContext(ctx,utils.GetQueries().Insert,user_id,username,email)
 	if err != nil{
 		return false, err
 	}
-	return  true, nil
+	return  verify, nil
 }

@@ -1,6 +1,6 @@
 module github.com/LLM-Finetuning-platform/go-auth-api
 
-go 1.26.2
+go 1.26.5
 
 require (
 	github.com/caarlos0/env/v11 v11.4.1 // direct
@@ -12,13 +12,14 @@ require (
 require (
 	github.com/google/uuid v1.6.0
 	github.com/redis/go-redis/v9 v9.19.0
-	google.golang.org/grpc v1.81.1
+	google.golang.org/grpc v1.83.0
 	google.golang.org/protobuf v1.36.11
 )
 
 require (
-	golang.org/x/net v0.51.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260226221140-a57be14db171 // indirect
+	github.com/golang-jwt/jwt/v5 v5.3.1
+	golang.org/x/net v0.56.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 )
 
 require (
@@ -29,7 +30,7 @@ require (
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/resend/resend-go/v3 v3.7.0
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/crypto v0.49.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.35.0 // indirect
+	golang.org/x/crypto v0.53.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/text v0.39.0 // indirect
 )
