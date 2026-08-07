@@ -9,7 +9,7 @@ import (
 	"syscall"
 
 	"github.com/LLM-Finetuning-platform/go-auth-api/config"
-	auth_pb "github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc/proto/v1"
+	auth_pb "github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc/proto/v2"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc/server"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/db"
 	"github.com/LLM-Finetuning-platform/go-auth-api/internal/services/email"

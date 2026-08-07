@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package proto.v2;
+
+option go_package = "github.com/LLM-Finetuning-platform/go-auth-api/internal/handlers/grpc;auth_pb";
+import "proto/v2/schema.proto";
+service AuthAPIService {
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc Auth(AuthRequest) returns (AuthResponse) {}
+    rpc Signup(SignupRequest) returns (SignupResponse) {}
+    rpc OTP(OTPRequest) returns (OTPResponse) {}
+    rpc SignUPVerify(SignUPVerifyRequest) returns (SignUPVerifyResponse) {}
+    rpc LoginVerify(LoginVerifyRequest) returns (LoginVerifyResponse) {}
+};
+
+message LoginRequest {
+    Email email =1;
+}
+
+message LoginResponse {
+   OTPStatus status =1;
+}
+
+message AuthRequest {
+    Token token = 1;
+}
+message AuthResponse {
+    UserData userdata = 1;
+}
+message SignupRequest {
+    Email email = 1;
+}
+
+message OTPResponse {
+  Token token =1;
+  UserData userdata =2;
+}
+message OTPRequest {
+    string otp =1;
+    Email email =2;
+}
+message SignupResponse{
+    OTPStatus status = 1;
+}
+
+message Email {
+    string email = 1;
+}
+
+message SignUPVerifyRequest {
+    string otp = 1;
+    string username = 2;
+    string email = 3;
+}
+
+message SignUPVerifyResponse {
+    bool status = 1;
+    OTPResponse response = 2;
+}
+
+message LoginVerifyRequest {
+    OTPRequest request = 1;
+    Email email = 2;
+}
+
+message LoginVerifyResponse {
+    bool status = 1;
+    OTPResponse response = 2;
+}
