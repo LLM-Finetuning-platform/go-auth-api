@@ -1,12 +1,8 @@
-version: v1
-
+version: v2
 plugins:
-    - plugin: go
-      out: internal/handlers/grpc
-      opt: paths=source_relative
-    
-    - plugin: go-grpc
-      out: internal/handlers/grpc
-      opt: paths=source_relative
-
-      
+  - local: protoc-gen-go
+    out: internal/handlers/grpc
+    opt: paths=source_relative
+  - local: protoc-gen-go-grpc
+    out: internal/handlers/grpc
+    opt: paths=source_relative
